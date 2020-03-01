@@ -9,11 +9,13 @@ void print(vector<vector<int>> sudoku)
         {
             cout << sudoku[i][j] << " ";
         }
+        // cout << "\n";
     }
     // cout << "\n";
 }
 bool isValid(vector<vector<int>> sudoku, int i, int j)
 {
+    // cout << "kya hua\n";
     // checking in row
     for (int idx = 0; idx < 9; idx++)
     {
@@ -39,18 +41,41 @@ bool isValid(vector<vector<int>> sudoku, int i, int j)
     }
 
     // checking in 3x3 box
-    int I = (i / 3) * 3, J = (j / 3) * 3;
-    for (int idx = I; idx < I + 3; idx++)
+    int I = (i / 3) * 3;
+    int J = (j / 3) * 3;
+    // checking north west
+    for (int row = i - 1, col = j - 1; row >= I && col >= J; row--, col--)
     {
-        for (int idx1 = J; idx1 < J + 3; idx1++)
+        if (sudoku[row][col] == sudoku[i][j])
         {
-            if (idx != i || idx1 != j)
-            {
-                if (sudoku[i][j] == sudoku[idx][idx1])
-                {
-                    return false;
-                }
-            }
+            return false;
+        }
+    }
+
+    // checking north east
+    for (int row = i - 1, col = j + 1; row >= I && col <= J + 2; row--, col++)
+    {
+        if (sudoku[row][col] == sudoku[i][j])
+        {
+            return false;
+        }
+    }
+
+    // checking south east
+    for (int row = i + 1, col = j + 1; row <= I + 2 && col <= J + 2; row++, col++)
+    {
+        if (sudoku[row][col] == sudoku[i][j])
+        {
+            return false;
+        }
+    }
+
+    //check south west
+    for (int row = i + 1, col = j - 1; row <= I + 2 && col >= J; row++, col--)
+    {
+        if (sudoku[row][col] == sudoku[i][j])
+        {
+            return false;
         }
     }
 
@@ -64,12 +89,13 @@ bool solveSudoku(vector<vector<int>> &sudoku, int i, int j)
     {
         return true;
     }
-    bool result;
+    bool result = false;
     if (sudoku[i][j] == 0)
     {
         for (int idx = 1; idx <= 9; idx++)
         {
             sudoku[i][j] = idx;
+            // print(sudoku);
             if (isValid(sudoku, i, j))
             {
                 if (j == 8)
@@ -79,17 +105,17 @@ bool solveSudoku(vector<vector<int>> &sudoku, int i, int j)
                 else
                 {
                     result = solveSudoku(sudoku, i, j + 1);
-                }   
-            }
-            if (result == true)
-            {
-                return true;
-            }
-            else 
-            {
-                sudoku[i][j] = 0;
+                }
+
+                if (result == true)
+                {
+                    return true;
+                }
             }
         }
+        sudoku[i][j] = 0;
+        // print(sudoku);
+        return false;
     }
     else
     {
@@ -106,6 +132,9 @@ bool solveSudoku(vector<vector<int>> &sudoku, int i, int j)
 }
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
     int t;
     cin >> t;
     while (t--)
@@ -118,9 +147,13 @@ int main()
                 cin >> sudoku[i][j];
             }
         }
-        if(solveSudoku(sudoku, 0, 0) == true)
+        if (solveSudoku(sudoku, 0, 0) == true)
         {
             print(sudoku);
+        }
+        else
+        {
+            cout << -1;
         }
         cout << "\n";
     }
