@@ -17,7 +17,7 @@ Output Format
 
 For each test case, print a single number S representing sum of all the numbers formed by traversing all the paths
 from root to leaf. Print answer MOD 1000000007 (109+7).
-/*
+*/
 
 
 #include <bits/stdc++.h>
