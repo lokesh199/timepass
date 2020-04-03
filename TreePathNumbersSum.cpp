@@ -1,34 +1,70 @@
 #include <bits/stdc++.h>
 #define MOD 1000000007
-#define ULLI unsigned long long int
 using namespace std;
 
-ULLI convertToInt(string number)
+int modOnString(string n)
 {
-    int len = number.length(), i;
-    if (len != 0)
+    int ans = 0, i;
+    int len = n.length();
+    for (i = 0; i < len; i++)
     {
-        ULLI n = 0;
-        for (i = 0; i < len; i++)
-        {
-            n = (n * 10 + (number[i] - '0'));
-        }
-        return n;
+        ans = (ans * 10 + n[i] - '0') % MOD;
     }
-    return 0;
+    return ans;
 }
-void findSumHelper(int root, map<int, vector<int>> parentChildMap, string number, ULLI &num1, ULLI &num2)
+string add(string num1, string num2)
 {
-    if (parentChildMap[root].size() == 0)
+    int len1 = num1.length(), len2 = num2.length(), carry = 0, i, j;
+    if (len1 > len2)
+    {
+        string sum(len1 + 1, '0');
+        for (i = len1 - 1, j = len2 - 1; i >= 0 && j >= 0; i--, j--)
+        {
+            sum[i + 1] = (((num1[i] - '0') + (num2[j] - '0') + carry) % 10) + '0';
+            carry = ((num1[i] - '0') + (num2[j] - '0') + carry) / 10;
+        }
+        while (i >= 0)
+        {
+            sum[i + 1] = (((num1[i] - '0') + carry) % 10) + '0';
+            carry = ((num1[i] - '0') + carry) / 10;
+            i--;
+        }
+        if (carry > 0)
+        {
+            sum[0] = carry + '0';
+        }
+        return sum;
+    }
+    string sum(len2 + 1, '0');
+    for (i = len1 - 1, j = len2 - 1; i >= 0 && j >= 0; i--, j--)
+    {
+        sum[j + 1] = (((num1[i] - '0') + (num2[j] - '0') + carry) % 10) + '0';
+        carry = ((num1[i] - '0') + (num2[j] - '0') + carry) / 10;
+    }
+    while (j >= 0)
+    {
+        sum[j + 1] = (((num2[j] - '0') + carry) % 10) + '0';
+        carry = ((num2[j] - '0') + carry) / 10;
+        j--;
+    }
+    if (carry > 0)
+    {
+        sum[0] = carry + '0';
+    }
+    return sum;
+}
+void findSumHelper(int root, map<int, vector<int>> parentChildMap, string &number, string &num1, string &num2)
+{
+    if (parentChildMap.find(root) == parentChildMap.end())
     {
         string rootInStringForm = to_string(root);
         int previousLenOfNumber = number.length();
         int lengthOfPresentRoot = rootInStringForm.length();
         number += rootInStringForm;
-        num2 = convertToInt(number);
-        num1 = (num1 % MOD + num2 % MOD) % MOD;
-        num2 = 0;
-        number.erase(previousLenOfNumber - 1, lengthOfPresentRoot);
+        num2.assign(number);
+        num1.assign(add(num1, num2));
+        num2.clear();
+        number.erase(previousLenOfNumber, lengthOfPresentRoot);
     }
     else
     {
@@ -46,9 +82,10 @@ void findSumHelper(int root, map<int, vector<int>> parentChildMap, string number
 int findSum(int root, map<int, vector<int>> parentChildMap)
 {
     string number;
-    ULLI num1 = 0, num2 = 0;
+    string num1, num2;
     findSumHelper(root, parentChildMap, number, num1, num2);
-    return num1;
+    int ans = modOnString(num1);
+    return ans;
 }
 int main()
 {
