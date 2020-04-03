@@ -1,3 +1,25 @@
+/*
+Given an N-ary tree, where each node can have zero or more children. We are required to find the sum of all the 
+numbers formed by traversing from root to leaf nodes in the tree. Nodes of the tree are guarnenteed to contain unique numbers.
+
+Input Format
+
+First line of input contains T - number of test cases. Its followed by 3*T lines. First line of each test case 
+contains N - number of nodes in the tree. Next N-1 lines of the test case contain two space separated integers 
+p c representing parent child relationships. Last line of the test case contains identifier for root of the tree.
+
+Constraints
+
+1 <= T <= 1000
+1 <= N <= 1000
+
+Output Format
+
+For each test case, print a single number S representing sum of all the numbers formed by traversing all the paths
+from root to leaf. Print answer MOD 1000000007 (109+7).
+/*
+
+
 #include <bits/stdc++.h>
 #define MOD 1000000007
 using namespace std;
