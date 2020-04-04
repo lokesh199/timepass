@@ -21,7 +21,7 @@ long find(int n)
     }
     else 
     {
-        dp[n] = ((find(n-1)%MOD + /*(long long)*/find(n-2)%MOD)%MOD + /*(long long)*/(8*find(n-5))%MOD)%MOD;
+        dp[n] = ((find(n-1)%MOD + find(n-2)%MOD)%MOD + (8*find(n-5))%MOD)%MOD;
     }
     return dp[n];
 }
