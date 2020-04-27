@@ -1,0 +1,53 @@
+vector<int> bfs(int n, int m, vector<vector<int>> edges, int s) {
+    vector<int> distance(n,INT_MAX);
+    distance[s-1] = 0;
+    
+    bool *visited = new bool[n];
+    fill(visited , visited + n,false);
+    
+    map<int,vector<int>> adjList;
+    int len1 = edges.size();
+    for(int i=0;i<len1;i++)
+    {
+        int len2 = edges[i].size()-1;
+        for(int j=0;j<len2;j++)
+        {
+            adjList[edges[i][j]].push_back(edges[i][j+1]);
+            adjList[edges[i][j+1]].push_back(edges[i][j]);
+        }
+    }
+
+    queue<int> q;
+    q.push(s);
+    while(!q.empty())
+    {
+        int src = q.front();
+        visited[src-1] = true;
+        q.pop();
+        int len = adjList[src].size();
+        for(int i=0;i<len;i++)
+        {
+            if(!visited[adjList[src][i] - 1])
+            {
+                q.push(adjList[src][i]);
+                if(distance[src-1]+1 < distance[adjList[src][i]-1])
+                {
+                    distance[adjList[src][i]-1] = distance[src-1]+1;
+                }
+            }
+        }
+    }
+    distance.erase(distance.begin()+s-1);
+    for(int i=0;i<n-1;i++)
+    {
+        if(distance[i] != INT_MAX)
+        {
+            distance[i] *= 6;
+        }
+        else
+        {
+            distance[i] = -1;
+        }
+    }
+    return distance;
+}
